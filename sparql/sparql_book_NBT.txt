@@ -10,10 +10,12 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
   ?s rdf:type schema:Book .
   ?s dc:type ?dctype .
   ?s dcx:ppn ?ppn .
-  ?s dc:date ?label .
+  ?s dc:title ?label .
+  ?s rdfs:label ?label .
   ?s dc:language ?taal .
   ?s dc:publisher ?uitgever .
   ?s dcx:plaatsUitgave ?plaatsUitgave .
+  ?s dcx:datumUitgave ?datumUitgave .
   ?s bibo:isbn ?ISBN .
   ?s dcx:oclc ?OCLCnummer .
   ?s dcterms:description ?description .
@@ -22,15 +24,17 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
   ?s pica:p002-/pica:f0 ?type .
   ?s pica:p003-/pica:f0 ?ppn .
-  OPTIONAL { ?s pica:002C/pica:fa ?dctype } .
-  OPTIONAL { ?s pica:011-/pica:fa ?datumUitgave } .
-  OPTIONAL { ?s pica:010-/pica:fa ?taal } .
-  OPTIONAL { ?s pica:033A/pica:fn ?uitgever } .  
-  OPTIONAL { ?s pica:033A/pica:fp ?plaatsUitgave } . 
-  OPTIONAL { ?s pica:004A/pica:f0 ?ISBN } . 
-  OPTIONAL { ?s pica:003O/pica:f0 ?OCLCnummer } .
-  OPTIONAL { ?s pica:020A/pica:fa ?description } .
-  OPTIONAL { ?s pica:032-/pica:fa ?editie } .
+  OPTIONAL { ?s pica:p002C/pica:fa ?dctype } .
+  OPTIONAL { ?s pica:p003-/pica:f0 ?ppn } .
+  OPTIONAL { ?s pica:p021A/pica:fa ?label } .
+  OPTIONAL { ?s pica:p010-/pica:fa ?taal } .
+  OPTIONAL { ?s pica:p033A/pica:fn ?uitgever } .  
+  OPTIONAL { ?s pica:p033A/pica:fp ?plaatsUitgave } . 
+  OPTIONAL { ?s pica:p011-/pica:fa ?datumUitgave } .
+  OPTIONAL { ?s pica:p004A/pica:f0 ?ISBN } . 
+  OPTIONAL { ?s pica:p003O/pica:f0 ?OCLCnummer } .
+  OPTIONAL { ?s pica:p020A/pica:fa ?description } .
+  OPTIONAL { ?s pica:p032-/pica:fa ?editie } .
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As)", "i")
 }};
 

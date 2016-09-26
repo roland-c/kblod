@@ -1,0 +1,183 @@
+## This SPARQL script converts raw pica rdf data to an alternative RDF expression
+
+## Books: first run type = (Aa|AA|aa|aA|Ab|Ac|Af|AF|As)
+## first run no resource links, only literals!
+SPARQL
+DEFINE sql:log-enable 3
+
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s rdf:type schema:Book .
+  ?s dc:type ?dctype .
+  ?s dcx:ppn ?ppn .
+  ?s dc:date ?label .
+  ?s dc:language ?taal .
+  ?s dc:publisher ?uitgever .
+  ?s dcx:plaatsUitgave ?plaatsUitgave .
+  ?s bibo:isbn ?ISBN .
+  ?s dcx:oclc ?OCLCnummer .
+  ?s dcterms:description ?description .
+  ?s bibo:edition ?editie .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p003-/pica:f0 ?ppn .
+  OPTIONAL { ?s pica:002C/pica:fa ?dctype } .
+  OPTIONAL { ?s pica:011-/pica:fa ?datumUitgave } .
+  OPTIONAL { ?s pica:010-/pica:fa ?taal } .
+  OPTIONAL { ?s pica:033A/pica:fn ?uitgever } .  
+  OPTIONAL { ?s pica:033A/pica:fp ?plaatsUitgave } . 
+  OPTIONAL { ?s pica:004A/pica:f0 ?ISBN } . 
+  OPTIONAL { ?s pica:003O/pica:f0 ?OCLCnummer } .
+  OPTIONAL { ?s pica:020A/pica:fa ?description } .
+  OPTIONAL { ?s pica:032-/pica:fa ?editie } .
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As)", "i")
+}};
+
+## creator
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:creator ?creatorURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p028A/pica:f9 ?creatorURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## co-creator
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:creator ?coCreatorURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p028B/pica:f9 ?coCreatorURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## isPartOf 1 
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:isPartOf ?partOfURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p036D/pica:f9 ?partOfURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## isPartOf 2
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:isPartOf ?partOfURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p036E/pica:f9 ?partOfURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## isFormatOf
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:isFormatOf ?formatOfURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p039M/pica:f9 ?formatOfURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 1
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p044Z/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 2
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p045T/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 3
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p045S/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 4
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p045R/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 5
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p045Q/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 6
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p044K/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+## subject 7
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
+  ?s pica:p002-/pica:f0 ?type .
+  ?s pica:p040-/pica:f9 ?thesaurusURI 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
+}};
+
+
+
+  

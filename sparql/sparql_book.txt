@@ -1,0 +1,203 @@
+## This SPARQL script converts raw pica rdf data to an alternative RDF expression
+
+## Books: first run type = (Aa|AA|aa|aA|Ab|Ac|Af|AF|As)
+## first run no resource links, only literals!
+SPARQL
+DEFINE sql:log-enable 3
+
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s rdf:type schema:Book .
+  ?s dc:type ?dctype .
+  ?s dcx:ppn ?ppn .
+  ?s dc:creator ?creator .
+  ?s dcterms:creator ?creatorURI .
+  ?s dcterms:creator ?coCreatorURI .
+  ?s dc:date ?label .
+  ?s dc:language ?taal .
+  ?s dc:publisher ?uitgever .
+  ?s dcx:plaatsUitgave ?plaatsUitgave .
+  ?s bibo:isbn ?ISBN .
+  ?s dcx:oclc ?OCLCnummer .
+  ?s dcterms:description ?description .
+  ?s bibo:edition ?editie .
+  ?s dcterms:isPartOf ?partOfURI .
+  ?s dcterms:isFormatOf ?formatOfURI .
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:003-0 ?ppn .
+  OPTIONAL { ?s pica:021Ah ?creator } .  
+  OPTIONAL { ?s pica:002Ca ?dctype } .
+  OPTIONAL { ?s pica:011-a ?datumUitgave } .
+  OPTIONAL { ?s pica:010-a ?taal } .
+  OPTIONAL { ?s pica:033An ?uitgever } .  
+  OPTIONAL { ?s pica:033Ap ?plaatsUitgave } . 
+  OPTIONAL { ?s pica:004A0 ?ISBN } . 
+  OPTIONAL { ?s pica:003O0 ?OCLCnummer } .
+  OPTIONAL { ?s pica:020Aa ?description } .
+  OPTIONAL { ?s pica:032-a ?editie } .
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As)")
+}};
+
+## creator
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:creator ?creatorURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:028A9 ?ppnCreator 
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?ppnCreator))) AS ?creatorURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## co-creator
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:creator ?coCreatorURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:028B9/pica:heeftWaarde ?ppnCoCreator 
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?ppnCreator))) AS ?coCreatorURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## isPartOf 1 
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:isPartOf ?partOfURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:036D9 ?partOf 
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?partOf))) AS ?partOfURI)
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## isPartOf 2
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:isPartOf ?partOfURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:037D9 ?partOf 
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?partOf))) AS ?partOfURI)
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## isFormatOf
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:isFormatOf ?formatOfURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:039M9 ?formatOf 
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?formatOf))) AS ?formatOfURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+
+## subject 1
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:044Z9/pica:heeftWaarde ?thesaurus 
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## subject 2
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:045T9/pica:heeftWaarde ?thesaurus  
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## subject 3
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:045S9/pica:heeftWaarde ?thesaurus  
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## subject 4
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:045R9/pica:heeftWaarde ?thesaurus  
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## subject 5
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:045Q9/pica:heeftWaarde ?thesaurus  
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## subject 6
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:044K9/pica:heeftWaarde ?thesaurus  
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+## subject 7
+SPARQL
+INSERT INTO GRAPH <http://metamatter.io/nbc/>
+{
+  ?s dcterms:subject ?thesaurusURI .
+}
+WHERE { GRAPH <http://lod.kb.nl/nbc/> { 
+  ?s pica:002-0 ?type .
+  ?s pica:040-9/pica:heeftWaarde ?thesaurus  
+  BIND(IRI(CONCAT("http://lod.kb.nl/ppn/", str(?thesaurus))) AS ?thesaurusURI) 
+  FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)")
+}};
+
+
+
+  

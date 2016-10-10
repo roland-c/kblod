@@ -110,7 +110,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbt/> {
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
 }};
 
-## subject 2
+## subject 2 (GOO period)
 SPARQL
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
@@ -122,7 +122,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbt/> {
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
 }};
 
-## subject 3
+## subject 3 (GOO country code !!! is geen PPN ...)
 SPARQL
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
@@ -130,11 +130,11 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 }
 WHERE { GRAPH <http://lod.kb.nl/nbt/> { 
   ?s pica:p002-/pica:f0 ?type .
-  ?s pica:p045S/pica:f9 ?thesaurusURI 
+  ?s pica:p045S/pica:fa ?thesaurusURI 
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
 }};
 
-## subject 4
+## subject 4 (Goo period)
 SPARQL
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
@@ -146,7 +146,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbt/> {
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
 }};
 
-## subject 5
+## subject 5 (GOO basisclassificatie)
 SPARQL
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
@@ -158,7 +158,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbt/> {
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
 }};
 
-## subject 6
+## subject 6 (GOO descriptor)
 SPARQL
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
@@ -170,7 +170,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbt/> {
   FILTER regex(str(?type), "(Aa|AA|aa|aA|Ab|Ac|Af|AF|As|Oa|Ob)", "i")
 }};
 
-## subject 7
+## subject 7 (Persoon als onderwerp )
 SPARQL
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {

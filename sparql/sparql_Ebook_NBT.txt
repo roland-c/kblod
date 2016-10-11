@@ -3,7 +3,6 @@
 ## E-Books: second run, type = (Oa|Ob)
 SPARQL
 DEFINE sql:log-enable 3
-
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
    ?s rdf:type schema:EBook . 
@@ -27,7 +26,7 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
    ?s dcterms:subject ?thesaurusURI .
    ?s foaf:page ?link .
 }
-WHERE { GRAPH <http://lod.kb.nl/nbcoai/> {
+WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
    ?s pica:003-/pica:003-0 ?ppn .
    OPTIONAL { ?s pica:021A/pica:021Ah ?creator }
@@ -47,14 +46,13 @@ WHERE { GRAPH <http://lod.kb.nl/nbcoai/> {
    OPTIONAL { ?s pica:028B/pica:028B9 ?coCreatorURI }
    OPTIONAL { ?s pica:036D/pica:036D9 ?partOfURI }
    OPTIONAL { ?s pica:037D/pica:037D9 ?partOfURI }
-   OPTIONAL { ?s pica:039M9 ?formatOf
+   OPTIONAL { ?s pica:039M/pica:039M9 ?formatOf }
    OPTIONAL { ?s pica:044Z/pica:044Z9 ?thesaurusURI }
    OPTIONAL { ?s pica:045T/pica:045T9 ?thesaurusURI }
    OPTIONAL { ?s pica:045S/pica:045S9 ?thesaurusURI }
    OPTIONAL { ?s pica:045R/pica:045R9 ?thesaurusURI }
    OPTIONAL { ?s pica:044K/pica:044K9 ?thesaurusURI }
-   OPTIONAL { ?s pica:040-/pica:040-9 ?thesaurusURI }
-	      
+   OPTIONAL { ?s pica:040-/pica:040-9 ?thesaurusURI }	      
    FILTER REGEX(str(?type), "(Oa|Ob)")
 }};
 

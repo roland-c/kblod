@@ -50,6 +50,31 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
 }};
 
 
+# fix link EBook Book dcterms:alternative
+
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+   ?s dcterms:alternative ?url
+}
+WHERE { GRAPH <http://lod.kb.nl/nbtpica/> { 
+  ?s pica:002-/pica:002-0 ?type .
+  ?s pica:039T/pica:039T9 ?url
+  FILTER REGEX(str(?type), "(Oa|Ob)")
+}};
+
+# fix subject link EBook from Book relation
+
+SPARQL
+INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
+{
+   ?s dcterms:subject ?subject
+}
+WHERE { GRAPH <http://lod.kb.nl/nbtlod/> { 
+  ?s a schema:EBook .
+  ?s dcterms:alternative ?book .
+  ?book dcterms:subject ?subject .
+}};
 
 
 

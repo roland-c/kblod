@@ -1,6 +1,7 @@
 ## This SPARQL script converts raw pica rdf data to an alternative RDF expression
 
-## E-Books: second run, type = (Oa|Ob)
+## E-Books, type = first position F
+
 SPARQL
 DEFINE sql:log-enable 3
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
@@ -47,7 +48,6 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
 	      BIND(fn:substring-before(?loc, " :") as ?location) 
 	      BIND(fn:substring-after(?loc, ": ") as ?shelfmark) 
 	      } .
-
    FILTER REGEX(fn:substring(str(?type),1,1), "F")
 }};
 

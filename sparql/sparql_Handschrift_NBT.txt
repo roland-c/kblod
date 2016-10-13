@@ -48,7 +48,8 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
 	      BIND(fn:substring-before(?loc, " :") as ?location) 
 	      BIND(fn:substring-after(?loc, ": ") as ?shelfmark) 
 	      } .
-   FILTER REGEX(fn:substring(str(?type),1,1), "F")
+#   FILTER REGEX(fn:substring(str(?type),1,1), "F")
+   FILTER REGEX(str(?type), "(Fa|Fc|FF|Fr|Fs)")
 }};
 
 

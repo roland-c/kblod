@@ -1,5 +1,8 @@
 ## This SPARQL script converts raw pica rdf data to an alternative RDF expression
 
+## disable checkpoints while running script
+checkpoint_interval(6000);
+      
 ## All BibliographicResources
 SPARQL
 DEFINE sql:log-enable 3
@@ -162,7 +165,6 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    BIND(fn:substring(?type,1,2) as ?firstChar)
    FILTER REGEX (?firstChar, "Ob")
 }};
-
 # MultivolumeBook
 SPARQL
 DEFINE sql:log-enable 3
@@ -187,7 +189,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
    BIND(fn:substring(?type,1,2) as ?firstChar)
    FILTER REGEX (?firstChar, "Of", 'i')
-}};`
+}};
 
 ## Type Handschriften
 SPARQL
@@ -344,3 +346,6 @@ WHERE { GRAPH <http://lod.kb.nl/nbt/> {
   ?s dcterms:relation ?book .
   ?book dcterms:subject ?subject .
 }};
+
+## enable checkpoints while running script
+checkpoint_interval(120);

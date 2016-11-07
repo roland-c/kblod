@@ -1,11 +1,10 @@
 ## This SPARQL script converts raw pica rdf data to an alternative RDF expression
 
-## E-Books: second run, type = (Oa|Ob)
+## E-Books
 SPARQL
 DEFINE sql:log-enable 3
 INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 {
-#  ?s rdf:type schema:EBook . 
    ?s rdf:type dcterms:BibliographicResource . 
    ?s dc:type ?dctype .
    ?s kbo:ppn ?ppn .
@@ -24,13 +23,14 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
    ?s dcterms:subject ?thesaurusURI .
    ?s foaf:page ?link .
    ?s dcterms:relation ?relation .
-  # PublicationEvent
+   ?s dcterms:subject ?thesaurusURI .
    ?s schema:publication ?e .
    ?e rdf:type schema:PublicationEvent .
    ?e rdfs:label ?labePub .
    ?e dc:publisher ?uitgever .
    ?e kbo:plaatsUitgave ?plaatsUitgave .
    ?e kbo:datumUitgave ?datumUitgave .
+   
 }
 WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
@@ -39,9 +39,10 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    OPTIONAL { ?s pica:002C/pica:002Ca ?dctype }
    OPTIONAL { ?s pica:021A/pica:021Aa ?label }
    OPTIONAL { ?s pica:021A/pica:021Aa ?title .
- 	      OPTIONAL { ?s pica:021A/pica:021Ah ?subtitle }
-	      BIND(CONCAT(?title, " ", ?subtitle) as ?label)
-	      BIND(CONCAT("Publicatie ", ?title) as ?labelPub) }  
+	      BIND(CONCAT("Publicatie ", ?title) as ?labelPub) }
+   OPTIONAL { ?s pica:021A/pica:021Aa ?title .
+	      ?s pica:021A/pica:021Ah ?subtitle 
+ 	      BIND(CONCAT(?title, " ", ?subtitle) as ?label) }    
    OPTIONAL { ?s pica:011-/pica:011-a ?datumUitgave } 
    OPTIONAL { ?s pica:010-/pica:010-a ?taal }
    OPTIONAL { ?s pica:033A/pica:033An ?uitgever } 
@@ -54,7 +55,9 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    OPTIONAL { ?s pica:028A/pica:028A9 ?creatorURI }
    OPTIONAL { ?s pica:028B/pica:028B9 ?contributorURI }
    OPTIONAL { ?s pica:039T/pica:039T9 ?relation }
-#   FILTER REGEX(str(?type), "(Oa|Ob)")
+   OPTIONAL { ?s ev:hasLocalBlock/pica:145Z/pica:145Za ?kbcode 
+	      BIND(IRI(CONCAT("http://lod.kb.nl/KBCode/", REPLACE(?kbcode," ", "_"))) AS ?thesaurusURI ) } .
+   BIND(IRI(CONCAT(str(?s), "_publication")) AS ?e)
    BIND(fn:substring(?type,1,1) as ?firstChar)
    FILTER (?firstChar = "O")
 }};
@@ -70,7 +73,7 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
    BIND(fn:substring(?type,1,2) as ?firstChar)
-   FILTER (?firstChar = "(Oa|Oe)")
+   FILTER REGEX (?firstChar, "(Oa|Oe)")
 }};
 
 ## Type Periodical
@@ -83,7 +86,7 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
    BIND(fn:substring(?type,1,2) as ?firstChar)
-   FILTER (?firstChar = "Ob")
+   FILTER REGEX (?firstChar, "Ob")
 }};
 
 ## Type MultivolumeBook
@@ -96,7 +99,7 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
    BIND(fn:substring(?type,1,2) as ?firstChar)
-   FILTER (?firstChar = "Oc")
+   FILTER REGEX (?firstChar, "Oc")
 }};
 
 ## Type Article
@@ -109,7 +112,7 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbtlod/>
 WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
    ?s pica:002-/pica:002-0 ?type .
    BIND(fn:substring(?type,1,2) as ?firstChar)
-   FILTER (?firstChar = "Of")
+   FILTER REGEX (?firstChar, "Of", 'i')
 }};
 
 # fix subject link EBook from Book relation
@@ -124,3 +127,4 @@ WHERE { GRAPH <http://lod.kb.nl/nbtlod/> {
   ?s dcterms:relation ?book .
   ?book dcterms:subject ?subject .
 }};
+

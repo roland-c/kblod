@@ -15,7 +15,8 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbt/>
   ?s kbo:ppn ?ppn .
   ?s dc:title ?title .
   ?s rdfs:label ?label .
-  ?s kbo:tweedeTitel ?2etitle
+  ?s kbo:tweedeTitel ?2etitle .
+  ?s bf:subtitle ?2etitle .
   ?s dc:language ?taal .
   ?s bibo:isbn ?ISBN .
   ?s dcterms:description ?description .
@@ -25,12 +26,13 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbt/>
   ?s dcterms:creator ?creatorURI .
   ?s dcterms:contributor ?contributorURI .
   ?s kbo:coCreator ?coCreatorURI .
-  ?s kbo:secondCreator ?secondCreatorURI .
+  ?s dcterms:contributor ?secondCreatorURI .
   ?s dcterms:isPartOf ?partOfURI .
   ?s dcterms:isFormatOf ?formatOfURI .
   ?s dcterms:relation ?relation .
   ?relation dcterms:relation ?s .
   ?s dcterms:subject ?thesaurusURI .
+  ?s dcterms:spatial ?spatial .
   ?s owl:sameAs ?oclcURI .
   ?s foaf:page ?link .
   ?s schema:location ?location .
@@ -55,6 +57,7 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
 	     BIND(CONCAT(?title, ?subtitle) as ?label)
 	     BIND(CONCAT("Publicatie ", ?title) as ?labelPub) }  
   OPTIONAL { ?s pica:021A/pica:021Ab ?2etitle . } 
+  OPTIONAL { ?s pica:021A/pica:021Ad ?subtitle . } 
   OPTIONAL { ?s pica:021A/pica:021Aj ?alternative } .
   OPTIONAL { ?s pica:010-/pica:010-a ?taal } .
   OPTIONAL { ?s pica:033A/pica:033An ?uitgever } .  
@@ -86,6 +89,10 @@ WHERE { GRAPH <http://lod.kb.nl/nbtpica/> {
   OPTIONAL { ?s pica:044K/pica:044K9 ?thesaurusURI }
   OPTIONAL { ?s pica:040-/pica:040-9 ?thesaurusURI }
   OPTIONAL { ?s pica:039T/pica:039T9 ?relation }
+  OPTIONAL { ?s pica:035G/pica:035Ga ?spatial .
+	     ?s pica:035G/pica:035Gb ?spatial .
+	     ?s pica:035G/pica:035Gc ?spatial .
+	     ?s pica:035G/pica:035Gd ?spatial . }
   OPTIONAL { ?s ev:hasLocalBlock/pica:145Z/pica:145Za ?kbcode 
 	     BIND(IRI(CONCAT("http://lod.kb.nl/KBCode/", REPLACE(?kbcode," ", "_"))) AS ?thesaurusURI ) } 
   OPTIONAL { ?s pica:009P/pica:009Pa ?page 

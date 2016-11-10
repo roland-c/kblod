@@ -14,8 +14,7 @@ INSERT INTO GRAPH <http://lod.kb.nl/nbt/>
   ?s dc:type ?dctype .
   ?s kbo:ppn ?ppn .
   ?s dc:title ?title .
-  ?s rdfs:label ?label .
-  ?s kbo:tweedeTitel ?2etitle .
+#  ?s rdfs:label ?label .
   ?s bf:subtitle ?2etitle .
   ?s dc:language ?taal .
   ?s bibo:isbn ?ISBN .
